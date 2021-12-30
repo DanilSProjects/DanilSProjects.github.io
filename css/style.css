@@ -58,3 +58,53 @@ nav {
 #construction img {
     max-width: 60%;
 }
+
+/* Writeups home styling */
+
+.cards-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.cards-container a:hover figure{
+    background-color: rgb(156, 156, 156);
+    color: black;
+}
+
+.cards-container a {
+    text-decoration: none;
+    margin: 25px 30px;
+}
+
+.cards-container figure {
+    margin: 0;
+    border: 3px solid #6b6b6b;
+    background-color: #000000;
+    color: #ececec;
+    padding: 25px;
+    width:250px;
+    height: 250px;
+    box-sizing: border-box;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.cards-container figure img {
+    width: 100%;
+    border: 5px solid rgb(175, 149, 0);
+    border-radius: 20px;
+    margin-bottom: 25px;
+}
+
+.cards-container figure figcaption {
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.writeups-intro {
+    padding: 15px;
+}
