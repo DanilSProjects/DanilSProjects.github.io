@@ -14,8 +14,10 @@
         </nav>
         <div class="writeup-header">
             <img src="../../images/writeups/sieberrsec_3/sieberrsec_3.0_logo.png" alt="Sieberrsec 3.0 CTF logo.">
-            <h1>Sieberrsec CTF 3.0</h1>
-            <p>December 26, 2021</p>
+            <div class="writeup-header-caption">
+                <h1>Sieberrsec CTF 3.0</h1>
+                <p>December 26, 2021</p>
+            </div>
         </div>
         <div class="writeup-description">
             <p>This was my first real 'serious' CTF, apart from my various small YCEP experiences. All in all, even though about 99% of the challenges I solved were OSINT, I found the challenges a lot of fun and good learning experiences.</p>
@@ -32,6 +34,119 @@
         </div>
         <div id="osint">
             <h2 class="writeup-section-header">OSINT</h2>
+            <div class="challenge">
+                <h3>"The Sieberr" Heist Part 1:</h3>
+                <p class="solve-number">Solves: 45</p>
+                <div class="instructions">
+                    <h4>Instructions</h4>
+                    <p>Well, boss instructed me not to reveal much, but we're planning some heist and I need your help.</p>
+                    <p>One of our men tailed someone to their home quite a while back.</p>
+                    <p>He discreetly took a quick picture to mark the location of the person's house.</p>
+                    <p>Please help me determine the location.</p>
+                    <p>(Actually, the heist was planned to be carried out sometime then, but due to unforeseen circumstances it was delayed and we are now revisiting the resources we had obtained back then).</p>
+                    <p>Submit the flag as IRS{A_B_C_D_E}, where:</p>
+                    <p>A. Unit Number (without any spacing and numbers only)</p>
+                    <p>B. Street Name (without any spacing and in all capitals) [e.g. If the road name is "John Rd", input as "JOHNRD"; "John St" > "JOHNST"]</p>
+                    <p>C. Locality Name (without any spacing and in all capitals)</p>
+                    <p>D. Postcode (numbers only)</p>
+                    <p>E. Number of Storeys of the House (without any spacing and numbers only)</p>
+                    <p>Addendum for "The Sieberr" Heist Part 1:</p>
+                    <p>A locality is found within the suburb 🙂</p>
+                </div>
+                <div class="solution">
+                    <h4>Solution</h4>
+                    <p>An image is attached, which seems to show some sort of orange to black gradient.</p>
+                    <img src="../../images/writeups/sieberrsec_3/the_sieberr_heist_part1.jpg">
+                    <p>Since the picture was taken at the location of the person we are targeting, it would probably have some meaningful location data on it. A quick look at the EXIF data gives us this:</p>
+                    <img src="../../images/writeups/sieberrsec_3/heistp1_1.png">
+                    <p>Looks like we're on the right track! Looking up the coordinates on Google Maps gives us a location in Australia, specifically in Mosman, NSW.</p>
+                    <img src="../../images/writeups/sieberrsec_3/heistp1_2.png">
+                    <p>From here, we can already see that the street is called Hunter Rd and the postcode is 2088. Let's take a look at street view to see if we can find some more of the information needed.</p>
+                    <img src="../../images/writeups/sieberrsec_3/heistp1_3.png">
+                    <p>Now we can clearly see that the unit number is 3 and that the house has 2 storeys.</p>
+                    <p>Now for the locality name - Mosman, right? Well, no.</p>
+                    <p>I was stuck on this for a little while until the challenge author clarified that the locality was within this specific suburb in Mosman. Looks like we have to dig deeper.</p>
+                    <p>Taking a look at the Wikipedia page, we see that Mosman has a few traditional locality names.</p>
+                    <img src="../../images/writeups/sieberrsec_3/heistp1_4.png">
+                    <p>Looking back at the surroundings on Google Maps, we can see quite a few places with the name "Balmoral" in them, including the Balmoral Beach. Looks like our target lives in Balmoral!</p>
+                    <p class="flag">So, final flag would be: IRS{3_HUNTERRD_BALMORAL_2088_2}</p>
+                </div>
+            </div>
+            <div class="challenge">
+                <h3>"The Sieberr" Heist Part 2:</h3>
+                <p class="solve-number">Solves: 22</p>
+                <div class="instructions">
+                    <h4>Instructions</h4>
+                    <p>We retrieved this photo from the person's phone.</p>
+                    <p>How did we get it? You don't need to know, don't be silly and ask too many questions.</p>
+                    <p>Anyway, the IT team commented that the guy seemed particularly interested in this photo. Unfortunately though, they were not able to find more info.</p>
+                    <p>Tell me as much information as you can deduce from this photo.</p>
+                    <p>Submit the flag as IRS{A_B_C_D_E_F}, where:</p>
+                    <p>A. Name of the street that the photo was taken on (without any spacing and in all capitals) [e.g. If the road name is "John Rd", input as "JOHNRD"; "John St" > "JOHNST"]</p>
+                    <p>B. Name of the cross street (without any spacing and in all capitals) [e.g. If the road name is "John Rd", input as "JOHNRD"; "John St" > "JOHNST"]</p>
+                    <p>C. Bus manufacturer (without any spacing and in all capitals)</p>
+                    <p>D. Bus model (without any spacing and in all capitals)</p>
+                    <p>E. Bus route number (any letter should be in capitals)</p>
+                    <p>F. Destination of the bus route that the bus is heading to (without any spacing and in all capitals)</p>
+                </div>
+                <div class="solution">
+                    <h4>Solution</h4>
+                    <p>This one is not easy.</p>
+                    <p>An image is attached, showing a bus at a traffic light.</p>
+                    <img src="../../images/writeups/sieberrsec_3/the_sieberr_heist_part2.png">
+                    <p>At first glance, this doesn't really seem useful. EXIF data doesn't yield anything.</p>
+                    <p>Upon closer inspection, we can clearly see that the bus's operator is Metrobus, its identification number (not sure what to call it) is 2213 and its route number seems to be either 540 or 340. We can work with this - let's research more about this "Metrobus".</p>
+                    <p>Based on the previous part, the operator we need is the Metrobus in Sydney, which has a Wikipedia page conveniently detailing its routes.</p>
+                    <img src="../../images/writeups/sieberrsec_3/heistp2_1.png">
+                    <p>It doesn't have any routes numbered 540, but it does have route 340 (recently renamed from M40 to 340)</p>
+                    <img src="../../images/writeups/sieberrsec_3/heistp2_2.png">
+                    <p>Looking at the route, we get a list of stations to check out. We see that its end destination is Bondi Junction - cool, now to find the location of the image.</p>
+                    <p>This stumped me for quite a bit - this list is very vague and doesn't tell me what route the bus takes to reach these stations. Doing a bit more research, I came across <a href="https://moovitapp.com/index/en-gb/public_transportation-line-340-Sydney-442-855272-4614288-0">this site</a></p>
+                    <img src="../../images/writeups/sieberrsec_3/heistp2_3.png">
+                    <p>I ended up looking up each station on Google Maps until I got to Town Hall, which looked a lot more business-y than the other stations, which were more suburban and quiet. This looked like it was a bit more accurate!</p>
+                    <img src="../../images/writeups/sieberrsec_3/heistp2_4.png">
+                    <p>After a bit of wandering around, I managed to find the columned building in the picture - the Sydney Town Hall - and the [almost] exact location of the picture. The photo was taken on York St, with the cross street being Druitt St.</p>
+                    <img src="../../images/writeups/sieberrsec_3/heistp2_5.png">
+                    <p>So, what about the bus manufacturer and model? Looking online at the specific bus 2213, we find this local bus enthusiast website which has a better picture, clearly showing the bus  to be manufactured by Volvo.</p>
+                    <img src="../../images/writeups/sieberrsec_3/heistp2_6.png">
+                    <p>After some more searching (i.e. "metrobus sydney volvo"), the exact model was found to be the B12BLEA. Nice!</p>
+                    <p class="flag">So, our final flag would be: IRS{YORKST_DRUITTST_VOLVO_B12BLEA_340_BONDIJUNCTION}</p>
+                </div>
+            </div>
+            <div class="challenge">
+                <h3>"The Sieberr" Heist Part 3:</h3>
+                <p class="solve-number">Solves: 12</p>
+                <div class="instructions">
+                    <h4>Instructions</h4>
+                    <p>Alright, there are some new developments and I need your help again.</p>
+                    <p>The guy's name is Casrihms Myrert, you can find him on social media.</p>
+                    <p>He's going to a hospital to visit someone's kid, but we hear that there is another person that he will be visiting in the same hospital. This other person is of interest to us.</p>
+                    <p>Let me know what hospital he is going to, as well as what bus he is taking.</p>
+                    <p>Submit the flag as IRS{A_B_C}</p>
+                    <p>A. Bus route number (any letter should be in capitals)</p>
+                    <p>B. Destination of the bus route that the bus is heading to (without any spacing and in all capitals)</p>
+                    <p>C. Name of the hospital that our guy is going to (without any spacing and in all capitals)</p>
+                </div>
+                <div class="solution">
+                    <h4>Solution</h4>
+                    <p>More buses, eh?</p>
+                    <p>Searching for the name "Casrihms Myrert" on Google didn't bring up any accounts, so I checked on common social media platforms, like Twitter and Instagram. Instagram brought up an account that looks like our guy.</p>
+                    <img src="../../images/writeups/sieberrsec_3/heistp3_1.png">
+                    <p>His posts didn't yield anything particularly interesting, but one of his highlights seems pretty interesting.</p>
+                    <img src="../../images/writeups/sieberrsec_3/heistp3_2.jpg">
+                    <p>So, we are looking for a (pretty much direct) bus going from the Sydney CBD to a hospital in the Northern Beaches.</p>
+                    <p>The reference to TransportNSW leads us to <a href="https://transportnsw.info">a really useful website</a>, showcasing all of the bus routes in NSW.</p>
+                    <img src="../../images/writeups/sieberrsec_3/heistp3_3.png">
+                    <p>Before we start going crazy looking up hundreds of bus routes to the Northern Beaches (which I totally did not do for over an hour), let's take a closer look at that highlight again.</p>
+                    <p>After analysing the image further (based on the fact that no driver is visible and the fact that the cars in front are quite far below), we realise that the bus he is taking is actually a double decker. It turns out that this is a huge clue for us, because Sydney only has one double decker bus line, the B-Line, conveniently passing from the CBD to the Northern Beaches.</p>
+                    <img src="../../images/writeups/sieberrsec_3/heistp3_4.png">
+                    <p>Wow, isn't it great we didn't waste our time looking at every bus line to the Northern Beaches in Sydney? That would have been really infuriating! (I hope you sense the pain in my words)</p>
+                    <p>The B-Line route is called B1 and looking it up on the TransportNSW website (or reading the Wikipedia article) shows that its two stops are at the City and Mona Vale. Since our target is going from the CBD to the hospital, our destination would have to be Mona Vale.</p>
+                    <img src="../../images/writeups/sieberrsec_3/heistp3_5.png">
+                    <p>Now, which hospital should we choose? The obvious first choice is Northern Beaches Hospital, which is in a suburb called Frenchs Forest. Looking at the route map again, however, the B1 route does not directly pass through there - no dice. The second option that shows up on Google is, fittingly, Mona Vale Hospital, which the B1 goes directly to. Looks like we have our target!</p>
+                    <p class="flag">Our flag would be: IRS{B1_MONAVALE_MONAVALEHOSPITAL}</p>
+                </div>
+            </div>
         </div>
         <div id="crypto">
             <h2 class="writeup-section-header">Cryptography</h2>

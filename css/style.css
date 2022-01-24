@@ -111,6 +111,28 @@ nav {
 
 /* Writeup page styling */
 
+.writeup-header,
+.writeup-description,
+.page-anchors,
+.writeup-section-header,
+.writeup-header-caption {
+    margin-left: 15px;
+}
+
+.writeup-header {
+    display: flex;
+    align-items: center;
+}
+
+.writeup-header-caption h1, .writeup-header-caption p {
+    margin: 0;
+}
+
+.writeup-header img {
+    margin-top: 15px;
+    border-radius: 10px;
+}
+
 .writeup-section-header {
     text-decoration: underline;
 }
@@ -121,11 +143,12 @@ nav {
 
 .challenge {
     margin: 15px;
+    padding: 15px;
     border: 5px solid black;
 }
 
 .challenge img {
-    height: 300px;
+    width: 50%;
     border: 2px solid black;
 }
 
