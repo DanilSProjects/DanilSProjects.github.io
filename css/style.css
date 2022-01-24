@@ -15,7 +15,7 @@ nav {
 }
 
 .nav-list {
-    margin:0;
+    margin: 10px 0px;
     display: flex;
     list-style-type: none;
     padding:15px;
@@ -107,4 +107,33 @@ nav {
 
 .writeups-intro {
     padding: 15px;
+}
+
+/* Writeup page styling */
+
+.writeup-section-header {
+    text-decoration: underline;
+}
+
+.solve-number {
+    font-size: 10px;
+}
+
+.challenge {
+    margin: 15px;
+    border: 5px solid black;
+}
+
+.challenge img {
+    height: 300px;
+    border: 2px solid black;
+}
+
+.instructions p{
+    font-size: 14px;
+    font-style: italic;
+}
+
+.flag {
+    font-weight: bold;
 }
