@@ -115,8 +115,9 @@ nav {
 .writeup-description,
 .page-anchors,
 .writeup-section-header,
-.writeup-header-caption {
-    margin-left: 15px;
+.writeup-header-caption,
+.page-anchors h2 {
+    margin: 15px;
 }
 
 .writeup-header {
@@ -132,6 +133,47 @@ nav {
     margin-top: 15px;
     border-radius: 10px;
 }
+ /* Page anchors styling specifically */
+
+.page-anchors {
+    padding: 40px 0px;
+    border: 3px dotted black;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.page-anchors ul {
+    padding: 0;
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    width: 80%;
+    margin-top: -20px;
+    margin-bottom: 0;
+}
+
+.page-anchors ul li {
+    list-style: none;
+    margin-top: 20px;
+}
+
+.page-anchors a{
+    color: rgb(0, 0, 163);
+    text-decoration: none;
+    font-size: 24px;
+    border: 2px solid black;
+    padding: 5px 12px;
+    border-radius: 3px;
+}
+
+.page-anchors a:hover {
+    color: rgb(81, 81, 255);
+    font-size: 28px;
+    transition: font-size 0.2s;
+}
+
+/* End of page anchors styling */
 
 .writeup-section-header {
     text-decoration: underline;
