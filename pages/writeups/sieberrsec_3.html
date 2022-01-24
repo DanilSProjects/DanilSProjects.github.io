@@ -261,6 +261,109 @@
         </div>
         <div id="misc">
             <h2 class="writeup-section-header">Misc</h2>
+            <div class="challenge">
+                <h3>Can You Math It?:</h3>
+                <p class="solve-number">Solves: 25</p>
+                <div class="instructions">
+                    <h4>Instructions</h4>
+                    <p>Can you solve 100 math equations?</p>
+                    <p>What if you only have 5 seconds to solve each?</p>
+                    <p>Server source code available here</p>
+                    <p>[This is a scripting challenge. You are expected to write a script to solve it.]</p>
+                    <p>Connect to the challenge at nc challs.sieberrsec.tech 29079</p>
+                </div>
+                <div class="solution">
+                    <h4>Solution</h4>
+                    <p>The source code of the program looks like this:</p>
+                    <code>
+    from time import time, sleep
+    from random import randint, choice 
+
+    operations = ('+', '-', '*', '/') 
+
+    def givechal():
+        # generate and solve equation, return both question and answer
+        challenge = str(randint(1, 999)) + ' ' + choice(operations) + ' ' + str(randint(1, 999)) + ' ' + choice(operations) + ' ' + str(randint(1, 999))
+        result = int(eval(challenge))
+        return challenge, result
+
+    def main():
+        # intro
+        print('Can You Math It?')
+        sleep(1) # add some arbitrary delay
+        print('You have 5 seconds to answer each question')
+        print('You have 100 questions to solve')
+        print('Please give all answers to nearest integer')
+        print('Good luck')
+        sleep(1)
+        for i in range(100): 
+            challenge, result = givechal() # generate and store question and answer
+            print('Solve ', challenge, ' :') # show the question
+            start = time() # start a timer
+            answer = input() # receive answer
+            timetaken = time() - start # stop timer, calculate time taken
+            if timetaken < 5 and answer == str(result): # if within time limit and correct answer
+                print('Correct!')
+                print('Next question')
+            elif timetaken > 5: # if more than 5 secs taken
+                print('Took longer than 5 seconds')
+                exit()
+            else: # answer wrong
+                print('Wrong answer')
+                exit()
+        print('Congratulations! You CAN math it')
+        print('The flag is IRS{FLAG_REDACTED}') # the flag goes here
+
+    if __name__ == '__main__':
+        main() # run the program
+                    </code>
+                    <p>This is good to have, because we now know that each question is going to have a fixed format:  INTEGER [OPERATION] INTEGER [OPERATION] INTEGER.</p>
+                    <p>We also know that there is a delay of about 2 seconds at the start and that the output once the questions are done will start with "Congratulations!".</p>
+                    <p>My python script for this looks like:</p>
+                    <code>
+    import nclib
+    import time
+    import math
+
+    nc = nclib.Netcat(connect='challs.sieberrsec.tech:29079')
+
+    def solve(para1, para2, para3, para4, para5):
+        realEquation = responseSplit[para1] + " " + responseSplit[para2] 
+        + " " + responseSplit[para3] + " " + responseSplit[para4] + " " + responseSplit[para5]
+        if eval(realEquation) < 0:
+            output = str(math.ceil(eval(realEquation)))
+        else:
+            output = str(math.floor(eval(realEquation)))
+        print(realEquation)
+        print(output)
+        nc.writeline(output)
+        response2 = nc.read()
+        print(response2)
+
+    while True:
+    response = nc.read()
+    print(str(response))
+    responseSplit = response.decode('ascii').split()
+    if responseSplit == []:
+        responseSplit=['a','b','c']
+    if responseSplit[0] == 'Next':
+            if responseSplit[0] == "Congratulations!":
+                finalResponse = nc.recv_all()
+                time.sleep(5)
+                nc.close()
+                print(finalResponse)
+            else:
+                solve(3,4,5,6,7)
+    if responseSplit[0].isnumeric() == True:
+        solve(0,1,2,3,4)
+                    </code>
+                    <p>This challenge took me a bit of time, because I first tried to do this with os and subprocess, but I ended up failing miserably, because subprocess wasn't really designed for continuously outputting and inputting. Finally, I desperately decided to take a chance on a library I knew nothing about [nclib] and actually got it working.</p>
+                    <p>I saw that you could do this much more easily, quickly and elegantly with pwntools, but I didn't (and still don't) know how to use it at the time, so don't stone me!</p>
+                    <p>When the script reaches the end, it hilariously throws an error, but still displays the final 2 lines we need:</p>
+                    <code>Congratulations! You CAN math it\nThe flag is IRS{4f2cd85d0a9f32f4}\n</code>
+                    <p class="flag">So, our final flag is: IRS{4f2cd85d0a9f32f4}</p>
+                </div>
+            </div>
         </div>
         <div id="forensics">
             <h2 class="writeup-section-header">Forensics</h2>
