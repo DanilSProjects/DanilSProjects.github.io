@@ -160,3 +160,7 @@ nav {
 .flag {
     font-weight: bold;
 }
+
+code {
+    white-space: pre
+}

@@ -150,6 +150,114 @@
         </div>
         <div id="crypto">
             <h2 class="writeup-section-header">Cryptography</h2>
+            <div class="challenge">
+                <h3>"I can't open this file? Part 1:</h3>
+                <p class="solve-number">Solves: 30</p>
+                <div class="instructions">
+                    <h4>Instructions</h4>
+                    <p>Oh no, I've encrypted a file and deleted the original! Now I have a file that is filled with rubbish. Thankfully I still have the encryption script, help me recover the original file! I'll even give you a flag if you do.</p>
+                </div>
+                <div class="solution">
+                    <h4>Solution</h4>
+                    <p>I didn't solve the two parts to this challenge during the CTF, but managed to do so after the fact and found them interesting, so I'm doing these small write ups on them.</p>
+                    <p>We get an encrypted file that looks like this:</p>
+                    <code>54574555140204321301090548435715603553305902483261394909</code>
+                    <p>And an encryption script:</p>
+                    <code>
+    import base64
+    flag = open("flag.txt", "rb").read()
+    flag = base64.b64encode(flag)
+    flag = flag.decode('ascii')
+    digits = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/="
+    encrypted = ""
+    for c in flag:
+        cur = digits.find(c)
+        if(cur < 10):
+            encrypted = encrypted + '0' + str(cur)
+        else:
+            encrypted = encrypted + str(cur)
+    f = open("flag.txt.encrypted", "w")
+    f.write(encrypted)
+    f.close()</code>
+                    <p>How does it work? The flag was encrypted into base64 and neatly formatted (how kind), then the index of each character in the base64 flag in the digits string was determined and appended to the encrypted string, which is what we got as the encrypted file.</p>
+                    <p>Thanks to the fact that a 0 is added in front whenever an index below 10 is obtained, we can space out the encrypted file text every two characters to get the index of each base64 flag character in the digits string (I'm sorry if this sounds longwinded/confusing).</p>
+                    <code>54 57 45 55 14 02 04 32 13 01 09 05 48 43 57 15 60 35 53 30 59 02 48 32 61 39 49 09</code>
+                    <p>Finally, we can write a simple python script to obtain the base64 flag from the digits string.</p>
+                    <code>
+    digits = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/="
+    encrypted_file=[54, 57, 45, 55, 14, 2, 4, 32, 13, 1, 9, 5, 48, 43, 57, 15, 60, 35, 53, 30, 59, 2, 48, 32, 61, 39, 49, 9]
+    decrypted_file=""
+    
+    for i in encrypted_file:
+        decrypted_file += digits[i]
+    
+    print(decrypted_file)</code>
+                <p class="flag">Our base64 flag would be printed as: "SVJTe24wd195MHVfYzRuX2MwZDN9", which we can decrypt to obtain our real flag - IRS{n0w_y0u_c4n_c0d3}.</p>
+                </div>
+            </div>
+            <div class="challenge">
+                <h3>I can't open this file? Part 2:</h3>
+                <p class="solve-number">Solves: 14</p>
+                <div class="instructions">
+                    <h4>Instructions</h4>
+                    <p>Thanks for helping me recover that file, now I have another file but it has been encrypted into something entirely different. Think you can help me again?</p>
+                </div>
+                <div class="solution">
+                    <h4>Solution</h4>
+                    <p>We get a huge encrypted file called "flag.jpg.encrypted". Indeed, looking at the encryption script, we're dealing with an encrypted jpg file.</p>
+                    <code>
+    import base64
+    flag = open("flag.jpg", "rb").read()
+    key = int(open("key.txt", "r").read())
+    flag = base64.b64encode(flag)
+    flag = flag.decode('ascii')
+    digits = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/="
+    encrypted = ""
+    for c in flag:
+        cur = (digits.find(c) + key) % 65
+        if(cur < 10):
+            encrypted = encrypted + '0' + str(cur)
+        else:
+            encrypted = encrypted + str(cur)
+    f = open("flag.jpg.encrypted", "w")
+    f.write(encrypted)
+    f.close()
+                    </code>
+                    <p>A similar concept to the previous one. The only difference is that every two characters in the encrypted file are equal to the remainder of the (digits index added to an unknown key number) divided by (65).</p>
+                    <p>The difficulty here, of course, is the fact that we don't know what the key number is. I'm not actually sure how you're intended to solve this - I was at a loss for quite a while.</p>
+                    <p>One thing that struck me, however, looking at the encrypted file is the fact that the number 50 appears very frequently. Perhaps a bit of frequency analysis is possible? Analysing one of my own, unencrypted JPG files, I found the capital 'A' character to be very frequent - why not try it out?</p>
+                    <p>The index of capital 'A' in the digits string is 36. Thus, (36 + key) % 65 = 50 should get us the key: 14. It's worth a shot with a python script, right?</p>
+                    <code>
+    digits = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/="
+    encrypted_file = open("flag.jpg.encrypted", "rb").read()
+    encrypted_file = encrypted_file.decode('ascii')
+    encrypted_array = []
+    
+    reformed_array = []
+    decrypted = ""
+    n = 0
+    
+    while n < len(encrypted_file):
+        encrypted_array.append(encrypted_file[n:n+2])
+        n+=2
+        
+    for i in encrypted_array:
+        if i[0] == "0":
+            reformed_array.append(i[1])
+        else:
+            reformed_array.append(i)
+    
+    for i in reformed_array:
+        decrypted += digits[int(i)-14]
+    
+    print(decrypted)
+                    </code>
+                    <p>This gets us a nice, long bit of base64 string. Decrypting and rendering it in CyberChef gets us this decrypted jpg.</p>
+                    <img src="../../images/writeups/sieberrsec_3/decrypted.jpg">
+                    <p>Wow, it actually worked! The flag makes me think that there was a much more obvious, less cheese-y way to do this with file signatures(maybe?), but I didn't figure it out.</p>
+                    <p class="flag">Our final decrypted flag: IRS{f1l3_5ign4tur3s!}</p>
+                </div>
+            </div>
         </div>
         <div id="misc">
             <h2 class="writeup-section-header">Misc</h2>
