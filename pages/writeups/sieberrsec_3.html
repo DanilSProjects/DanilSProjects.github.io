@@ -101,7 +101,7 @@
                     <p>It doesn't have any routes numbered 540, but it does have route 340 (recently renamed from M40 to 340)</p>
                     <img src="../../images/writeups/sieberrsec_3/heistp2_2.png">
                     <p>Looking at the route, we get a list of stations to check out. We see that its end destination is Bondi Junction - cool, now to find the location of the image.</p>
-                    <p>This stumped me for quite a bit - this list is very vague and doesn't tell me what route the bus takes to reach these stations. Doing a bit more research, I came across <a href="https://moovitapp.com/index/en-gb/public_transportation-line-340-Sydney-442-855272-4614288-0">this site</a></p>
+                    <p>This stumped me for quite a bit - this list is very vague and doesn't tell me what route the bus takes to reach these stations. Doing a bit more research, I came across <a href="https://moovitapp.com/index/en-gb/public_transportation-line-340-Sydney-442-855272-4614288-0" target="_blank">this site</a></p>
                     <img src="../../images/writeups/sieberrsec_3/heistp2_3.png">
                     <p>I ended up looking up each station on Google Maps until I got to Town Hall, which looked a lot more business-y than the other stations, which were more suburban and quiet. This looked like it was a bit more accurate!</p>
                     <img src="../../images/writeups/sieberrsec_3/heistp2_4.png">
@@ -135,7 +135,7 @@
                     <p>His posts didn't yield anything particularly interesting, but one of his highlights seems pretty interesting.</p>
                     <img src="../../images/writeups/sieberrsec_3/heistp3_2.jpg">
                     <p>So, we are looking for a (pretty much direct) bus going from the Sydney CBD to a hospital in the Northern Beaches.</p>
-                    <p>The reference to TransportNSW leads us to <a href="https://transportnsw.info">a really useful website</a>, showcasing all of the bus routes in NSW.</p>
+                    <p>The reference to TransportNSW leads us to <a href="https://transportnsw.info" target="_blank">a really useful website</a>, showcasing all of the bus routes in NSW.</p>
                     <img src="../../images/writeups/sieberrsec_3/heistp3_3.png">
                     <p>Before we start going crazy looking up hundreds of bus routes to the Northern Beaches (which I totally did not do for over an hour), let's take a closer look at that highlight again.</p>
                     <p>After analysing the image further (based on the fact that no driver is visible and the fact that the cars in front are quite far below), we realise that the bus he is taking is actually a double decker. It turns out that this is a huge clue for us, because Sydney only has one double decker bus line, the B-Line, conveniently passing from the CBD to the Northern Beaches.</p>
@@ -367,6 +367,28 @@
         </div>
         <div id="forensics">
             <h2 class="writeup-section-header">Forensics</h2>
+            <div class="challenge">
+                <h3>Birds?:</h3>
+                <p class="solve-number">Solves: 30</p>
+                <div class="instructions">
+                    <h4>Instructions</h4>
+                    <p>I can't help but feel that the birds are trying to tell me something...</p>
+                    <p>Hint: you may want to google for other instances of mp3 files in CTFs</p>
+                </div>
+                <div class="solution">
+                    <h4>Solution</h4>
+                    <p>We get a file called suspiciousbirds.mp3, which is full of unintelligible bird squawk. I've never dealt with mp3 files in CTFs before, so this was quite exciting.</p>
+                    <audio src="../../images/writeups/sieberrsec_3/suspiciousbirds.mp3" controls>Your browser does not support the audio element.</audio>
+                    <p>Searching online, we get (sure enough) a video of an Indian man teaching us how to find flags in mp3s. What was that famous saying? Right, nothing in this world is certain except death, taxes and Indian tech tutorials.</p>
+                    <p>Ajit walks us through a few of the ways flags can be hidden in mp3 files, using Audacity to, for example, reverse the file or change the display from webform to spectrogram. In our case, the latter works, displaying a hex string:</p>
+                    <img src="../../images/writeups/sieberrsec_3/birds_1.png">
+                    <img src="../../images/writeups/sieberrsec_3/birds_2.png">
+                    <code>68 74 74 70 73 3a 2f 2f 70 61 73 74 65 62 69 6e 2e 63 6f 6d 2f 5a 7a 6b 61 46 59 69 4c</code>
+                    <p>After running it through CyberChef, we get a <a href="https://pastebin.com/ZzkaFYiL" target="_blank">pastebin link</a>, which contains the flag.</p>
+                    <img src="../../images/writeups/sieberrsec_3/birds_3.png">
+                    <p class="flag">Our flag would be: IRS{s0m3Th1n9_5ouNDs_w3iRd}</p>
+                </div>
+            </div>
         </div>
     </body>
 </html>
